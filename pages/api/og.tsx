@@ -28,16 +28,25 @@ export default async function handler(req: NextRequest) {
           alignItems: "center",
         }}
       >
-        <img width={300} height={200} src={`${imageUrl}`} />
+        <img width={300} height={180} src={`${imageUrl}`} />
         <p style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
           {title}
         </p>
-        <p>Rs. {price}</p>
+        <p
+          style={{
+            display: "flex",
+            lineClamp: 2,
+            boxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          Rs. {price}
+        </p>
       </div>
     ),
     {
       width: 300,
-      height: 250,
+      height: 300,
     }
   );
 }
