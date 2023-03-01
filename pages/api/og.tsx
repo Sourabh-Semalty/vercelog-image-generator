@@ -30,7 +30,7 @@ export default async function handler(req: NextRequest) {
         <img
           width={300}
           height={180}
-          style={{ objectFit: "fill" }}
+          style={{ objectFit: "cover" }}
           src={`${imageUrl}`}
         />
         <p
@@ -43,7 +43,7 @@ export default async function handler(req: NextRequest) {
             WebkitLineClamp: 2,
           }}
         >
-          {title.substring(0, 50) + "..."}
+          {title.length > 50 ? title.substring(0, 50) + "..." : title}
         </p>
         <p
           style={{
