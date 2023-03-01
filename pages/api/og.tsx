@@ -9,7 +9,7 @@ export const config = {
 
 export default async function handler(req: NextRequest) {
   const { searchParams } = req.nextUrl;
-  const title = searchParams.get("title");
+  const title = searchParams.get("title") as string;
   const price = searchParams.get("price");
   const imageUrl = searchParams.get("image_url");
 
@@ -25,12 +25,25 @@ export default async function handler(req: NextRequest) {
           height: "100%",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "center",
         }}
       >
-        <img width={300} height={180} src={`${imageUrl}`} />
-        <p style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>
-          {title}
+        <img
+          width={300}
+          height={180}
+          style={{ objectFit: "fill" }}
+          src={`${imageUrl}`}
+        />
+        <p
+          style={{
+            margin: 0,
+            paddingLeft: 10,
+            paddingRight: 10,
+            fontSize: "18px",
+            fontWeight: "bold",
+            WebkitLineClamp: 2,
+          }}
+        >
+          {title.substring(0, 50) + "..."}
         </p>
         <p
           style={{
@@ -38,6 +51,8 @@ export default async function handler(req: NextRequest) {
             lineClamp: 2,
             boxOrient: "vertical",
             overflow: "hidden",
+            paddingLeft: 10,
+            paddingRight: 10,
           }}
         >
           Rs. {price}
