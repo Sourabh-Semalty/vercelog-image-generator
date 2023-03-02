@@ -1,23 +1,30 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
 import { ImageResponse } from "@vercel/og";
+import { NextApiRequest, NextApiResponse } from "next";
+
+import axios from "axios";
 import { NextRequest } from "next/server";
 
 export const config = {
   runtime: "edge",
 };
 
+async function getImageData(url: string) {
+  const response = await axios.get(url, { responseType: "arraybuffer" });
+  const imageData = Buffer.from(response.data, "binary").toString("base64");
+  return imageData;
+}
+
 export default async function handler(req: NextRequest) {
   const { searchParams } = req.nextUrl;
-  const title = searchParams.get("title");
+  const title = searchParams.get("title") as string;
   const price = searchParams.get("price");
-  const image_url = searchParams.get("image_url");
-  if (!title || !price || !image_url) {
-    return new ImageResponse(<>No image</>, {
-      width: 1200,
-      height: 630,
-    });
-  }
-  console.log(image_url);
-
+  const imageUrl = searchParams.get("image_url") as string;
+  console.log("-------------------");
+  console.log(searchParams, req.query);
+  console.log("-------------------");
+  const bufferImage = getImageData(imageUrl);
   return new ImageResponse(
     (
       <div
@@ -35,7 +42,7 @@ export default async function handler(req: NextRequest) {
           width={300}
           height={180}
           style={{ objectFit: "cover" }}
-          src={image_url}
+          src={`data:image/jpeg;base64,${bufferImage}`}
         />
         <p
           style={{
@@ -43,7 +50,7 @@ export default async function handler(req: NextRequest) {
             marginTop: 5,
             paddingLeft: 10,
             paddingRight: 10,
-            fontSize: "19px",
+            fontSize: "18px",
             fontWeight: "bold",
             WebkitLineClamp: 2,
           }}
@@ -57,7 +64,7 @@ export default async function handler(req: NextRequest) {
             boxOrient: "vertical",
             overflow: "hidden",
             paddingLeft: 10,
-            fontSize: "17px",
+            fontSize: "16px",
             fontWeight: "bold",
             paddingRight: 10,
           }}
